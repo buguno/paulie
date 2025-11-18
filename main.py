@@ -5,7 +5,7 @@ import time
 
 import pandas as pd
 from binance.client import Client as BinanceClient
-from binance.enums import *
+from binance.enums import ORDER_TYPE_MARKET, SIDE_BUY, SIDE_SELL
 from dotenv import load_dotenv
 from pydantic import BaseModel, ConfigDict
 
@@ -123,6 +123,8 @@ def trade_strategy(config: TradeStrategy) -> bool:
 
     account = config.client.get_account()
 
+    current_quantity = 0.0
+
     for account_asset in account['balances']:
         if account_asset['asset'] == config.asset:
             current_quantity = float(account_asset['free'])
@@ -173,4 +175,4 @@ while True:
     strategy_config.data = refresh_data
     strategy_config.position = actual_position
     actual_position = trade_strategy(strategy_config)
-    time.sleep(60 * 60)
+    time.sleep(15 * 60)
